@@ -1,0 +1,472 @@
+<!doctype html>
+
+<title>CodeMirror: C-like mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely/docs.css">                                       
+<link rel="stylesheet" href="rely/codemirror.css">
+
+<link rel="stylesheet" href="rely/idea.css">                                             <!-- 主题背景 -->
+
+<script src="rely/codemirror.js"></script>
+<script src="rely//matchbrackets.js"></script>
+<link rel="stylesheet" href="rely/show-hint.css">
+<script src="rely/show-hint.js"></script>
+<script src="rely/clike.js"></script>
+<style>.CodeMirror {border: 2px inset #dee;}</style>
+
+<h2>MainActivity05</h2>
+
+<div><textarea id="kotlin-code">
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.example.diyihang505.R
+class MainActivity05 : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+                                /*主布局文件*/
+      //  setContentView(R.layout.activity_main05)//第一步
+          setContentView(R.layout.activity_main05)
+    }
+}
+</textarea></div>
+<h2>News</h2>
+<div><textarea id="kotlin-code1">
+ package com.example.fragentbestpractice
+class News(val title: String,val content:String) {//title表示新闻标题content表示新闻内容
+}
+</textarea></div>
+<h2>NewsContentActivity</h2>
+<div><textarea id="kotlin-code2">
+  package com.example.fragentbestpractice
+
+import android.content.Context
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import androidx.fragment.app.Fragment
+import com.example.diyihang505.R
+import kotlinx.android.synthetic.main.activity_main05.*
+import kotlinx.android.synthetic.main.activity_news_content.*
+import kotlinx.android.synthetic.main.news_content_frag.*
+
+class NewsContentActivity : AppCompatActivity() {
+
+    companion object {
+        fun actionStar(context: Context, title: String, content: String) {
+                                         //
+            val intent = Intent(context, NewsContentActivity::class.java).apply {
+                putExtra("news_title", title)
+                putExtra("news_content", content)
+            }
+            context.startActivity(intent)
+        }
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+                               //新闻类容布局
+        setContentView(R.layout.activity_news_content)//加载布局
+        val title = intent.getStringExtra("news_title")//获取传入的新闻标题
+        val content = intent.getStringExtra("news_content")//获取传入的新闻类容
+        if (title != null && content != null) {
+                                           //fragmen里面的新闻类容
+            val fragment = newsTitleFrag1 as NewsContentFragment
+            fragment.refresh(title, content)
+        }
+
+    }
+}
+</textarea></div>
+
+<h2>Kotlin mode</h2>
+<div><textarea id="kotlin-code3">
+    package com.example.fragentbestpractice
+
+import android.os.Bundle
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import com.example.diyihang505.R
+import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.news_content_frag.*
+
+class NewsContentFragment:Fragment() {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.news_content_frag,container,false)
+    }
+
+    fun refresh( title: String, content:String ){
+        contentLayout.visibility=View.VISIBLE//能见度
+        newsTitle.text=title//刷新新闻标题
+        newsContent.text=content//刷新标题类容
+
+    }
+
+}
+</textarea></div>
+
+
+<h2>Kotlin mode</h2>
+<div><textarea id="kotlin-code4">
+import android.os.Bundle
+import android.util.Log
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.TextView
+import androidx.fragment.app.Fragment
+import com.example.diyihang505.R
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.activity_main05.*
+import kotlinx.android.synthetic.main.news_title_frag.*
+
+class NewsTitleFrgment:Fragment() {
+    private var  isTwoPane=false
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.news_title_frag,container,false)
+    }//第三部动态布局加载进来
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+
+        isTwoPane=activity?.findViewById<View>(R.id.newsContentLyout)!=null
+        Log.d("是真是假","$isTwoPane")
+
+        //true
+                  //当前活动能不能在当前视图中拿到这个id     拿到为  true 拿不到false
+     ///////////////////////////////////////////////////////
+
+        val layoutManager=LinearLayoutManager(activity)
+        newsTitleRecyclerView.layoutManager=layoutManager
+        val adapter=NewsAdapter(getNew())
+        newsTitleRecyclerView.adapter=adapter
+
+    }
+
+    private fun getNew():List<News>{
+        val newsList=ArrayList<News>()
+        for (i in 1..50){
+            val news=News("新闻标题$i",getRandomLengthSting("我是新闻类容"))
+            newsList.add(news)
+        }
+        return newsList
+    }
+
+    private fun getRandomLengthSting(str:String):String{
+        val n=(1..100).random()//随机数
+        val builder=StringBuffer()
+        repeat(n){
+            builder.append(str)
+        }
+        return builder.toString()
+    }
+
+
+
+    inner class NewsAdapter(val newsList: List<News>):RecyclerView.Adapter<NewsAdapter.ViewHolder>(){
+
+
+        inner class   ViewHolder(view:View):RecyclerView.ViewHolder(view){
+            val newTitle : TextView =view.findViewById(R.id.newsTitle)//新闻标题
+
+        }
+
+        override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
+            val view=LayoutInflater.from(parent.context).inflate(R.layout.news_item,parent,false)//动态加载新闻布局
+            val holder=ViewHolder(view)
+            holder.itemView.setOnClickListener{//当前视图子项目按钮
+                val news=newsList[holder.adapterPosition]//那个子项目
+
+
+                if(isTwoPane){//判断为空吗
+                    val fragment=newsContentFrag as NewsContentFragment
+                    fragment.refresh(news.title,news.content)                //大屏幕
+                }else{
+                    Log.d("ddd","daaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
+                    NewsContentActivity.actionStar(parent.context,news.title,news.content)//这里是小屏幕
+
+                }
+            }
+
+            return holder
+        }
+
+        override fun onBindViewHolder(holder: ViewHolder, position: Int) {
+            val news=newsList[position]
+            holder.newTitle.text=news.title
+        }
+
+        override fun getItemCount()=newsList.size
+
+    }
+}
+</textarea></div>
+
+<!--
+<h2>Kotlin mode</h2>
+<div><textarea id="kotlin-code1">
+</textarea></div>
+var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code"), {
+lineNumbers: true,
+matchBrackets: true,
+theme: "idea",       &lt;!&ndash; 主题背景 &ndash;&gt;
+mode: "text/x-kotlin"
+});
+-->
+
+
+
+<script>
+var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code4"), {
+lineNumbers: true,
+matchBrackets: true,
+theme: "idea",       <!-- 主题背景 -->
+mode: "text/x-kotlin"
+});
+
+
+ var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code3"), {
+lineNumbers: true,
+matchBrackets: true,
+theme: "idea",       <!-- 主题背景 -->
+mode: "text/x-kotlin"
+});
+
+  var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code2"), {
+lineNumbers: true,
+matchBrackets: true,
+theme: "idea",       <!-- 主题背景 -->
+mode: "text/x-kotlin"
+});
+
+      var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code1"), {
+lineNumbers: true,
+matchBrackets: true,
+theme: "idea",       <!-- 主题背景 -->
+mode: "text/x-kotlin"
+});
+
+      var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+
+
+      var mac = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
+      CodeMirror.keyMap.default[(mac ? "Cmd" : "Ctrl") + "-Space"] = "autocomplete";
+    </script>
+
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<title>CodeMirror: XML mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely//docs.css">
+<link rel="stylesheet" href="rely//codemirror.css">
+<script src="rely/codemirror.js"></script>
+<script src="xml.js"></script>
+    <h2>activity_main05.XML</h2>
+    <form><textarea id="code" name="code">
+<?xml version="1.0" encoding="utf-8"?>
+        <?xml version="1.0" encoding="utf-8"?>
+        <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                     android:id="@+id/newsTitleLyout"
+                     android:layout_width="match_parent"
+                     android:layout_height="match_parent"
+        >
+<!--第二部-->
+    <fragment
+            android:id="@+id/newsTitleFrag"
+            android:name="com.example.fragentbestpractice.NewsTitleFrgment"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
+</FrameLayout>
+</textarea></form>
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: "text/html",
+            lineNumbers: true
+        });
+    </script>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<title>CodeMirror: XML mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely//docs.css">
+<link rel="stylesheet" href="rely//codemirror.css">
+<script src="rely/codemirror.js"></script>
+<script src="xml.js"></script>
+<h2>activity_news_content.XML</h2>
+<form><textarea id="code1" name="code1">
+<?xml version="1.0" encoding="utf-8"?>
+    <?xml version="1.0" encoding="utf-8"?>
+    <!--新闻类容布局-->
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <fragment
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/newsTitleFrag1"
+            android:name="com.example.fragentbestpractice.NewsContentFragment"/>
+
+
+</LinearLayout>
+</textarea></form>
+
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("code1"), {
+        mode: "text/html",
+        lineNumbers: true
+    });
+</script>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<title>CodeMirror: XML mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely//docs.css">
+<link rel="stylesheet" href="rely//codemirror.css">
+<script src="rely/codemirror.js"></script>
+<script src="xml.js"></script>
+<h2>news_content_frag.XML</h2>
+<form><textarea id="code2" name="code1">
+<?xml version="1.0" encoding="utf-8"?>
+    <!--新闻类容板块-->
+<RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+            android:id="@+id/contentLayout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="invisible">
+        <!--新闻标题-->
+        <TextView
+                android:id="@+id/newsTitle"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:padding="10dp"
+                android:textSize="20dp" />
+        <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="#000" />
+        <TextView
+                android:id="@+id/newsContent"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:padding="15dp"
+                android:textSize="18sp" />
+    </LinearLayout>
+    <View
+            android:layout_width="1dp"
+            android:layout_height="match_parent"
+            android:layout_alignParentLeft="true"
+            android:background="#000"/>
+
+</RelativeLayout>
+</textarea></form>
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("code2"), {
+        mode: "text/html",
+        lineNumbers: true
+    });
+</script>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<title>CodeMirror: XML mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely//docs.css">
+<link rel="stylesheet" href="rely//codemirror.css">
+<script src="rely/codemirror.js"></script>
+<script src="xml.js"></script>
+<h2>news_item.XML</h2>
+<form><textarea id="code3" name="code1">
+<?xml version="1.0" encoding="utf-8"?>
+    <!--新闻列表名字-->
+<TextView
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/newsTitle"
+        android:maxLines="1"
+        android:ellipsize="end"
+        android:textSize="10dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:paddingTop="15dp"
+        android:paddingBottom="15dp"
+/>
+    <!--padding给控件周围加上补白
+    maxLines只能单行显示
+   ellipsize超出文本省略
+
+    -->
+</textarea></form>
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("code3"), {
+        mode: "text/html",
+        lineNumbers: true
+    });
+</script>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<title>CodeMirror: XML mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely//docs.css">
+<link rel="stylesheet" href="rely//codemirror.css">
+<script src="rely/codemirror.js"></script>
+<script src="xml.js"></script>
+<h2>news_title_frag.XML</h2>
+<form><textarea id="code4" name="code1">
+<?xml version="1.0" encoding="utf-8"?>
+    <!--新闻列表-->
+<LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <androidx.recyclerview.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/newsTitleRecyclerView"/>
+
+</LinearLayout>
+</textarea></form>
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("code4"), {
+        mode: "text/html",
+        lineNumbers: true
+    });
+</script>
+<!--
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+<title>CodeMirror: XML mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely//docs.css">
+<link rel="stylesheet" href="rely//codemirror.css">
+<script src="rely/codemirror.js"></script>
+<script src="xml.js"></script>
+<h2>activity_news_content.XML</h2>
+<form><textarea id="code9" name="code1">
+
+</textarea></form>
+<script>
+    var editor = CodeMirror.fromTextArea(document.getElementById("code9"), {
+        mode: "text/html",
+        lineNumbers: true
+    });
+</script>
+-->

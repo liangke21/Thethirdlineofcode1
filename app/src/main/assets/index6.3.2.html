@@ -1,0 +1,165 @@
+<!doctype html>
+
+<title>CodeMirror: C-like mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely/docs.css">                                       
+<link rel="stylesheet" href="rely/codemirror.css">
+
+<link rel="stylesheet" href="rely/idea.css">                                             <!-- 主题背景 -->
+
+<script src="rely/codemirror.js"></script>
+<script src="rely//matchbrackets.js"></script>
+<link rel="stylesheet" href="rely/show-hint.css">
+<script src="rely/show-hint.js"></script>
+<script src="rely/clike.js"></script>
+<style>.CodeMirror {border: 2px inset #dee;}</style>
+
+<h2>AnotherBroadcastReceiver</h2>
+<h1>abortBroadcast()//执行到这里后面的广播都不执行了//载段</h1>
+<div><textarea id="kotlin-code">
+package com.example.broadcasttest
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.widget.Toast
+
+class AnotherBroadcastReceiver : BroadcastReceiver() {
+
+    override fun onReceive(context: Context, intent: Intent) {
+        // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
+
+        Toast.makeText(context,"我执行了AnotherBroadcastReceiver", Toast.LENGTH_SHORT).show()
+        abortBroadcast()//执行到这里后面的广播都不执行了//载段
+    }
+}
+</textarea></div>
+
+<h2>MyBroadcastReceiver1</h2>
+
+<div><textarea id="kotlin-code1">
+package com.example.broadcasttest
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.widget.Toast
+
+class MyBroadcastReceiver1 : BroadcastReceiver() {
+
+    override fun onReceive(context: Context, intent: Intent) {
+        // This method is called when the BroadcastReceiver is receiving an Intent broadcast.
+       Toast.makeText(context,"我执行了MyBroadcastReceiver",Toast.LENGTH_SHORT).show()
+    }
+}
+</textarea></div>
+<h2>MainActivity05</h2>
+
+<div><textarea id="kotlin-code2">
+package com.example.broadcasttest
+
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.example.chaptersix632.R
+
+import kotlinx.android.synthetic.main.activity_main632.*
+
+class MainActivity632 : AppCompatActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main632)
+           button.setOnClickListener {
+               val intent= Intent("com.example.broadcasttest.MY_BROADCAST")//发送一条广播
+               intent.setPackage(packageName)//获取程序包名
+              sendOrderedBroadcast(intent,null)//第二个参数是权限相关的字符
+
+           }
+    }
+}
+</textarea></div>
+
+<script>
+var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code2"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+ var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code1"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+      var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+
+
+      var mac = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
+      CodeMirror.keyMap.default[(mac ? "Cmd" : "Ctrl") + "-Space"] = "autocomplete";
+    </script>
+
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<title>CodeMirror: XML mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely//docs.css">
+<link rel="stylesheet" href="rely//codemirror.css">
+<script src="rely/codemirror.js"></script>
+<script src="xml.js"></script>
+    <h2>AndroidManifest.xml</h2>
+    <form><textarea id="code" name="code">
+<?xml version="1.0" encoding="utf-8"?>
+        <?xml version="1.0" encoding="utf-8"?>
+        <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+                  package="com.example.broadcasttest">
+
+    <application
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/app_name"
+            android:roundIcon="@mipmap/ic_launcher_round"
+            android:supportsRtl="true"
+            android:theme="@style/Theme.BroadcastTest">
+
+        <receiver
+                android:name=".MyBroadcastReceiver"
+                android:enabled="true"
+                android:exported="true">
+            <intent-filter >
+
+                <action android:name="com.example.broadcasttest.MY_BROADCAST" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+                android:name=".AnotherBroadcastReceiver"
+                android:enabled="true"
+                android:exported="true">
+            <!--android:priority="100"优先执行-->
+            <intent-filter android:priority="100">
+                <action android:name="com.example.broadcasttest.MY_BROADCAST"/>
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
+</textarea></form>
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: "text/html",
+            lineNumbers: true
+        });
+    </script>

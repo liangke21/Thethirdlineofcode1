@@ -1,0 +1,142 @@
+<!doctype html>
+
+<title>CodeMirror: C-like mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely/docs.css">                                       
+<link rel="stylesheet" href="rely/codemirror.css">
+
+<link rel="stylesheet" href="rely/idea.css">                                             <!-- 主题背景 -->
+
+<script src="rely/codemirror.js"></script>
+<script src="rely//matchbrackets.js"></script>
+<link rel="stylesheet" href="rely/show-hint.css">
+<script src="rely/show-hint.js"></script>
+<script src="rely/clike.js"></script>
+<style>.CodeMirror {border: 2px inset #dee;}</style>
+
+<h2>定义高阶函数</h2>
+
+<div><textarea id="kotlin-code">
+class ExampleUnitTest {
+    @Test
+    fun addition_isCorrect() {
+        val num1=100
+        val num2=80
+        val result1=num1AndNum2(num1,num2,::plus)
+        val result2=num1AndNum2(num1,num2,::minus)
+
+        println(result1)//180
+        println(result2)//20
+
+    }
+    fun num1AndNum2(num1:Int,num2:Int,operation: (Int,Int)->Int):Int{
+        val  result=operation(num1,num2)
+        return result
+    }
+/*定义函数类型相匹配的函数*/
+    fun plus(num1: Int,num2: Int):Int{
+        return num1+num2
+    }
+    fun minus(num1: Int,num2: Int):Int{
+        return num1-num2
+    }
+}
+</textarea></div>
+
+
+<h2>Lambda表达式定义</h2>
+
+<div><textarea id="kotlin-code1">
+  fun addition_isCorrect() {
+        val num1=100
+        val num2=80
+        val result1=num1AndNum2(num1,num2){n1,n2->n1+n2}
+        val result2=num1AndNum2(num1,num2){n1,n2->n1-n2}
+        println(result1)//180
+        println(result2)//20
+
+    }
+</textarea></div>
+
+
+<h2>扩展函数里面定义高级函数</h2>
+
+<div><textarea id="kotlin-code2">
+import java.lang.StringBuilder
+class Higher {//实现apply这个函数的功能
+
+}
+//StringBuilder定义扩展函数
+// StringBuilder.语法结构表示这个函数类型定义在哪个类当中的
+fun StringBuilder.build(blok:StringBuilder.()->Unit):StringBuilder{
+    blok()
+    return this
+}
+ fun main(){
+     val list= listOf("apple","juzi","xiangjiao","putao")
+     val result=StringBuilder().build{
+         //Lambda表倒是接收的函数类型
+         //是StringBuilder类当中定义的函数类型
+         append("打印.\n")
+         for (i in list) {
+             append(i).append("\n")
+         }
+         append("打印结束")
+     }
+     println(result)
+ }
+
+
+
+</textarea></div>
+
+
+<style>  .show{white-space:pre-line;}</style>
+</head>
+<textarea class="show" rows="6">
+    打印.
+apple
+juzi
+xiangjiao
+putao
+打印结束
+</textarea>
+
+<h2>内联函数6.5.2</h2>
+<p>1</p>
+<img src="./img/650.jpg"  alt="内联函数" />
+<p>2</p>
+<img src="./img/650_1.jpg"  alt="内联函数" />
+<p>2</p>
+<img src="./img/650_2.jpg"  alt="内联函数" />
+
+
+<h1>6.5.3没有学习</h1>
+<script>
+var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code2"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+
+var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code1"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+
+      var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+
+
+      var mac = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
+      CodeMirror.keyMap.default[(mac ? "Cmd" : "Ctrl") + "-Space"] = "autocomplete";
+    </script>
+
+

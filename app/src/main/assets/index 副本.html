@@ -1,0 +1,52 @@
+<!doctype html>
+
+<title>CodeMirror: C-like mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely/docs.css">                                       
+<link rel="stylesheet" href="rely/codemirror.css">
+
+<link rel="stylesheet" href="rely/idea.css">                                             <!-- 主题背景 -->
+
+<script src="rely/codemirror.js"></script>
+<script src="rely//matchbrackets.js"></script>
+<link rel="stylesheet" href="rely/show-hint.css">
+<script src="rely/show-hint.js"></script>
+<script src="rely/clike.js"></script>
+<style>.CodeMirror {border: 2px inset #dee;}</style>
+
+<h2>MainActivity05</h2>
+
+<div><textarea id="kotlin-code">
+
+</textarea></div>
+<script>
+      var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+
+
+      var mac = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
+      CodeMirror.keyMap.default[(mac ? "Cmd" : "Ctrl") + "-Space"] = "autocomplete";
+    </script>
+
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<title>CodeMirror: XML mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely//docs.css">
+<link rel="stylesheet" href="rely//codemirror.css">
+<script src="rely/codemirror.js"></script>
+<script src="xml.js"></script>
+    <h2>AndroidManifest.XML</h2>
+    <form><textarea id="code" name="code">
+<?xml version="1.0" encoding="utf-8"?>
+        
+</textarea></form>
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: "text/html",
+            lineNumbers: true
+        });
+    </script>

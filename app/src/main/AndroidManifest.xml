@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.thethirdlineofcode">
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="第三行代码"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Thethirdlineofcode">
+        <activity android:name=".ChapterSixActivityFragment"></activity>
+        <activity android:name=".chapterFiveActivityFragment" />
+        <activity android:name=".chapterFiveActivity" />
+        <activity android:name=".MainActivity1">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity> <!-- diyihang505 -->
+        <activity android:name="com.example.fragentbestpractice.MainActivity05" />
+        <activity android:name="com.example.fragentbestpractice.NewsContentActivity" />
+        <!--第六章-->
+       <activity android:name="com.example.broadcasttest.MainActivity621"/>
+       <activity android:name="com.example.broadcasttest.MainActivity631"/>
+        <receiver
+            android:name="com.example.broadcasttest.MyBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.broadcasttest.MY_BROADCAST"/>
+            </intent-filter>
+        </receiver>
+
+        <!--无序广播6.3.2-->
+       <activity android:name="com.example.broadcasttest.MainActivity632"/>
+        <receiver
+            android:name="com.example.broadcasttest.MyBroadcastReceiver1"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter >
+
+                <action android:name="com.example.broadcasttest.MY_BROADCAST" />
+            </intent-filter>
+        </receiver>
+
+        <receiver
+            android:name="com.example.broadcasttest.AnotherBroadcastReceiver"
+            android:enabled="true"
+            android:exported="true">
+            <!--android:priority="100"优先执行-->
+            <intent-filter android:priority="100">
+                <action android:name="com.example.broadcasttest.MY_BROADCAST"/>
+            </intent-filter>
+        </receiver>
+        <!--广播的最佳实践6.4.0-->
+        <activity android:name="com.example.broadcastbestpractice.LoginActivity640"/>
+        <activity android:name="com.example.broadcastbestpractice.MainActivity640"/>
+
+    </application>
+
+</manifest>

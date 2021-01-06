@@ -1,0 +1,89 @@
+<!doctype html>
+
+<title>CodeMirror: C-like mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely/docs.css">                                       
+<link rel="stylesheet" href="rely/codemirror.css">
+
+<link rel="stylesheet" href="rely/idea.css">                                             <!-- 主题背景 -->
+
+<script src="rely/codemirror.js"></script>
+<script src="rely//matchbrackets.js"></script>
+<link rel="stylesheet" href="rely/show-hint.css">
+<script src="rely/show-hint.js"></script>
+<script src="rely/clike.js"></script>
+<style>.CodeMirror {border: 2px inset #dee;}</style>
+
+<h2>git安装使用</h2>
+
+<div><textarea id="kotlin-code">
+命令行
+ 配置
+Git Bash -> git config --global user.name "Tony"
+     -> git config --global user.emali "tony@gmail.com"
+
+查看git 用户和邮箱
+     -> git config --global user.name
+
+创建代码库
+     -> cd E:
+     -> cd AndroidPro/android/FirstCode
+     -> cd init
+
+查看     -> ls -al
+
+添加->
+    git add app  添加这个文件
+    git add .    添加当前目录 注意小点前面空格
+
+    提交 -> git commit -m "First commit"
+
+
+
+</textarea></div>
+<script>
+      var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+
+
+      var mac = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
+      CodeMirror.keyMap.default[(mac ? "Cmd" : "Ctrl") + "-Space"] = "autocomplete";
+    </script>
+
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<title>aaa</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely//docs.css">
+<link rel="stylesheet" href="rely//codemirror.css">
+<script src="rely/codemirror.js"></script>
+<script src="xml.js"></script>
+    <h2>提交本地代码库到git</h2>
+    <form><textarea id="code" name="code">
+<?xml version="1.0" encoding="utf-8"?>
+
+git init   创建本地代码仓库
+ls -al        仓库创建完成之后我们可以通过ls -al 命令来查看一下所有的Git操作，如图所示：
+https://github.com/ 网站创建仓库
+git clone  HTTPS      复制地址
+这个时候我们电脑上的文件目录下就会出现我们刚刚在github
+上所创建的仓库名所表示的文件夹，如下图所示，
+我们把以前的文件和文件夹都复制到这个新出现的文件夹里：
+
+然后再到命令行模式里将文件的目录切换到该文件夹里
+
+git add . 添加所有文件
+git commit -m "First commit"      同步到git
+最后，棋差一着，再写上：
+
+git push -u origin master   最后
+</textarea></form>
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: "text/html",
+            lineNumbers: true
+        });
+    </script>

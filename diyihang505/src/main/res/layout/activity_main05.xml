@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    android:id="@+id/newsTitleLyout"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+
+
+
+    >
+<!--第二部-->
+    <fragment
+        android:id="@+id/newsTitleFrag"
+        android:name="com.example.fragentbestpractice.NewsTitleFrgment"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+
+</FrameLayout>

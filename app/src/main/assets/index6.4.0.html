@@ -1,0 +1,295 @@
+<!doctype html>
+
+<title>CodeMirror: C-like mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely/docs.css">                                       
+<link rel="stylesheet" href="rely/codemirror.css">
+
+<link rel="stylesheet" href="rely/idea.css">                                             <!-- 主题背景 -->
+
+<script src="rely/codemirror.js"></script>
+<script src="rely//matchbrackets.js"></script>
+<link rel="stylesheet" href="rely/show-hint.css">
+<script src="rely/show-hint.js"></script>
+<script src="rely/clike.js"></script>
+<style>.CodeMirror {border: 2px inset #dee;}</style>
+
+<h2>ActivityCollector</h2>
+
+<div><textarea id="kotlin-code">
+package com.example.broadcastbestpractice
+
+import android.app.Activity
+
+object ActivityCollector {
+    private val activiies=ArrayList<Activity>()
+
+
+    fun   addActivity(activity: Activity){//添加活动
+        activiies.add(activity)
+
+    }
+    fun removActivity(activity: Activity){//减掉活动
+        activiies.remove(activity)
+    }
+    fun finishAll() {
+        for (activity in activiies) {
+            if (!activity.isFinishing) {
+                activity.finish()
+            }
+
+        }
+        activiies.clear()
+    }
+
+
+}
+</textarea></div>
+
+<h2>BaseActivity</h2>
+
+<div><textarea id="kotlin-code1">
+   package com.example.broadcastbestpractice
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
+import android.os.Bundle
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+
+open class BaseActivity :AppCompatActivity() {
+    lateinit var recreate: ForeceOffinReceiver
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        ActivityCollector.addActivity(this)
+    }
+
+
+
+    override fun onResume() {//和用户交互的时候调用
+        super.onResume()
+        val intentFilter = IntentFilter()
+        intentFilter.addAction("com.example.broadcastbestpractice.FORce_OFFLINE")//监听广播
+        recreate=ForeceOffinReceiver()
+        registerReceiver(recreate,intentFilter)
+    }
+
+    override fun onPause() {//启动或则恢复的时候调用
+        super.onPause()
+        unregisterReceiver(recreate)
+    }
+    override fun onDestroy() {//注销的时候调用
+        super.onDestroy()
+        ActivityCollector.removActivity(this)
+    }
+
+    inner class ForeceOffinReceiver : BroadcastReceiver() {
+        override fun onReceive(context: Context, intent: Intent?) {
+            AlertDialog.Builder(context).apply { //对话框
+                setTitle("提示")
+                setMessage("你是在干嘛呢")
+                setCancelable(false)
+                setPositiveButton("ok"){
+                    _,_->
+                    ActivityCollector.finishAll()//销毁所有Activity
+                    val i=Intent(context,LoginActivity640::class.java)
+                    context.startActivity(i)//重新启动
+                }
+                show()
+            }
+        }
+
+    }
+}
+    </textarea></div>
+
+<h2>LoginActivity640</h2>
+
+<div><textarea id="kotlin-code2">
+    package com.example.broadcastbestpractice
+
+import android.content.Intent
+import android.os.Bundle
+import android.widget.Toast
+import com.example.chaptersix640.R
+import kotlinx.android.synthetic.main.activity_login640.*
+
+class LoginActivity640 :BaseActivity() {
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_login640)
+        denglu.setOnClickListener {
+            val zhanghu=zhanghuEDIT.text.toString()
+            val mima=mimaEDIT.text.toString()
+            if (zhanghu=="admin"&& mima=="123456"){
+                val intent=Intent(this,MainActivity640::class.java)
+                startActivity(intent)
+                finish()//注销当前活动
+            }else{
+                Toast.makeText(this,"账户或则密码输入错误",Toast.LENGTH_SHORT).show()
+
+            }
+        }
+    }
+}
+    </textarea></div>
+
+<h2>MainActivity640</h2>
+
+<div><textarea id="kotlin-code3">
+ package com.example.broadcastbestpractice
+
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import com.example.chaptersix640.R
+
+import kotlinx.android.synthetic.main.activity_main640.*
+
+class MainActivity640 : BaseActivity() {
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main640)
+       xiaxian.setOnClickListener {
+           val intent= Intent("com.example.broadcastbestpractice.FORce_OFFLINE")
+           sendBroadcast(intent)
+       }
+    }
+}
+    </textarea></div>
+
+<script>
+ var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code3"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+
+ var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code2"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+
+ var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code1"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+
+      var kotlinEditor = CodeMirror.fromTextArea(document.getElementById("kotlin-code"), {
+          lineNumbers: true,
+          matchBrackets: true,
+		  theme: "idea",       <!-- 主题背景 -->
+          mode: "text/x-kotlin"
+      });
+
+
+      var mac = CodeMirror.keyMap.default == CodeMirror.keyMap.macDefault;
+      CodeMirror.keyMap.default[(mac ? "Cmd" : "Ctrl") + "-Space"] = "autocomplete";
+    </script>
+
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<title>CodeMirror: XML mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely//docs.css">
+<link rel="stylesheet" href="rely//codemirror.css">
+<script src="rely/codemirror.js"></script>
+<script src="xml.js"></script>
+    <h2>activity_main640.XML</h2>
+    <form><textarea id="code1" name="code">
+<?xml version="1.0" encoding="utf-8"?>
+        <?xml version="1.0" encoding="utf-8"?>
+        <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                      android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical">
+
+<Button
+        android:layout_width="200dp"
+        android:layout_height="60dp"
+        android:layout_gravity="center_horizontal"
+        android:id="@+id/xiaxian"
+        android:text="我要下线"/>
+
+
+</LinearLayout>
+</textarea></form>
+    <script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("code1"), {
+            mode: "text/html",
+            lineNumbers: true
+        });
+    </script>
+<!--/////////////////////////////////////////////////////////////////////////////////////////////////////////////-->
+<title>CodeMirror: XML mode</title>
+<meta charset="utf-8"/>
+<link rel=stylesheet href="rely//docs.css">
+<link rel="stylesheet" href="rely//codemirror.css">
+<script src="rely/codemirror.js"></script>
+<script src="xml.js"></script>
+<h2>activity_login640</h2>
+<form><textarea id="code" name="code">
+<?xml version="1.0" encoding="utf-8"?>
+    <?xml version="1.0" encoding="utf-8"?>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                  android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+        <TextView
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="18dp"
+                android:text="账户"/>
+        <EditText
+                android:id="@+id/zhanghuEDIT"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+    <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:orientation="horizontal">
+        <TextView
+                android:layout_width="90dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:textSize="18dp"
+                android:text="密码"/>
+        <EditText
+                android:id="@+id/mimaEDIT"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:layout_gravity="center_vertical"/>
+    </LinearLayout>
+    <Button
+            android:layout_width="200dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center_horizontal"
+            android:id="@+id/denglu"
+            android:text="登录"/>
+
+
+</LinearLayout>
+</textarea></form>
+<script>
+        var editor = CodeMirror.fromTextArea(document.getElementById("code"), {
+            mode: "text/html",
+            lineNumbers: true
+        });
+    </script>
+
